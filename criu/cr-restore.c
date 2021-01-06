@@ -1801,11 +1801,12 @@ static int restore_task_with_children(void *_arg)
 	}
 
 	pid = getpid();
-	if (vpid(current) != pid) {
-		pr_err("Pid %d do not match expected %d\n", pid, vpid(current));
-		set_task_cr_err(EEXIST);
-		goto err;
-	}
+	pid = pid;
+	// if (vpid(current) != pid) {
+	// 	pr_err("Pid %d do not match expected %d\n", pid, vpid(current));
+	// 	set_task_cr_err(EEXIST);
+	// 	goto err;
+	// }
 
 	if (log_init_by_pid(vpid(current)))
 		return -1;

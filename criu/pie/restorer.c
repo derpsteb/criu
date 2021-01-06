@@ -579,13 +579,13 @@ long __export_restore_thread(struct thread_restore_args *args)
 	struct rt_sigframe *rt_sigframe;
 	k_rtsigset_t to_block;
 	unsigned long new_sp;
-	int my_pid = sys_gettid();
+	// int my_pid = sys_gettid();
 	int ret;
 
-	if (my_pid != args->pid) {
-		pr_err("Thread pid mismatch %d/%d\n", my_pid, args->pid);
-		goto core_restore_end;
-	}
+	// if (my_pid != args->pid) {
+	// 	pr_err("Thread pid mismatch %d/%d\n", my_pid, args->pid);
+	// 	goto core_restore_end;
+	// }
 
 	/* All signals must be handled by thread leader */
 	ksigfillset(&to_block);
@@ -1828,11 +1828,11 @@ long __export_restore_task(struct task_restore_args *args)
 				 */
 				RUN_CLONE_RESTORE_FN(ret, clone_flags, new_sp, parent_tid, thread_args, args->clone_restore_fn);
 			}
-			if (ret != thread_args[i].pid) {
-				pr_err("Unable to create a thread: %ld\n", ret);
-				mutex_unlock(&task_entries_local->last_pid_mutex);
-				goto core_restore_end;
-			}
+			// if (ret != thread_args[i].pid) {
+			// 	pr_err("Unable to create a thread: %ld\n", ret);
+			// 	mutex_unlock(&task_entries_local->last_pid_mutex);
+			// 	goto core_restore_end;
+			// }
 		}
 
 		mutex_unlock(&task_entries_local->last_pid_mutex);
