@@ -1802,6 +1802,12 @@ static int restore_task_with_children(void *_arg)
 
 	pid = getpid();
 	if (vpid(current) != pid) {
+        char path[200];
+        char buffer[200];
+
+        snprintf(path, sizeof(path), "/proc/%d/exe", vpid(current));
+        readlinkat(0, path, buffer, sizeof(buffer));
+
 		pr_err("Pid %d do not match expected %d\n", pid, vpid(current));
 		set_task_cr_err(EEXIST);
 		goto err;

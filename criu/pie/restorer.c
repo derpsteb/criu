@@ -583,6 +583,12 @@ long __export_restore_thread(struct thread_restore_args *args)
 	int ret;
 
 	if (my_pid != args->pid) {
+        char path[200];
+        char buffer[200];
+
+        std_sprintf(path, "/proc/%d/exe", args->pid);
+        sys_readlinkat(0, path, buffer, sizeof(buffer));
+
 		pr_err("Thread pid mismatch %d/%d\n", my_pid, args->pid);
 		goto core_restore_end;
 	}
@@ -1829,7 +1835,12 @@ long __export_restore_task(struct task_restore_args *args)
 				RUN_CLONE_RESTORE_FN(ret, clone_flags, new_sp, parent_tid, thread_args, args->clone_restore_fn);
 			}
 			if (ret != thread_args[i].pid) {
-				pr_err("Unable to create a thread: %ld\n", ret);
+			    char path[200];
+			    char buffer[200];
+
+                std_sprintf(path, "/proc/%d/exe", thread_args[i].pid);
+                sys_readlinkat(0, path, buffer, sizeof(buffer));
+                pr_err("Unable to create a thread: %ld\ncmdline: %s\n", ret, buffer);
 				mutex_unlock(&task_entries_local->last_pid_mutex);
 				goto core_restore_end;
 			}
